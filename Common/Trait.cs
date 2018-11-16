@@ -1,14 +1,28 @@
-﻿namespace Common
+﻿using System.Collections.Generic;
+
+namespace Common
 {
     public class Trait
     {
         public Definition Definition { get; }
-        public string Value { get; set; }
+        public Value Value { get; }
 
-        public Trait(Definition definition, string value = null)
+        internal Trait(Definition definition, string value = null)
         {
             Definition = definition;
-            Value = value;
+            Value = new Value(value);
+        }
+
+        internal Trait(Definition definition, IEnumerable<string> value = null)
+        {
+            Definition = definition;
+            Value = new Value(value);
+        }
+
+        internal Trait(Definition definition, IDictionary<string, string> value = null)
+        {
+            Definition = definition;
+            Value = new Value(value);
         }
     }
 }

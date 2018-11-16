@@ -11,7 +11,7 @@ namespace Common
 
         private readonly HashSet<IRequirement> _requirements;
 
-        public Definition(string name, IEnumerable<IRequirement> requirements = null)
+        internal Definition(string name, IEnumerable<IRequirement> requirements = null)
         {
             Name = name;
             _requirements = requirements != null

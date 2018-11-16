@@ -10,10 +10,10 @@ namespace Common
         public Operator Operator { get; }
         public string ExpectedValue { get; }
 
-        public Comparison(Definition definition, Operator op, string expectedValue)
+        internal Comparison(Definition definition, Operator op, string expectedValue)
         {
             if (definition == null)
-                throw new ArgumentException("trait cannot be null");
+                throw new ArgumentException("trait is null");
             if (op == null)
                 throw new ArgumentException("operator is null");
 
@@ -36,30 +36,30 @@ namespace Common
         private bool Compare(Trait trait)
         {
             if (Operator == Operator.Equal)
-                return trait.Value != null && trait.Value == ExpectedValue;
+                return (string) trait.Value.GetValue<string>() == ExpectedValue;
             if (Operator == Operator.NotEqual)
-                return trait.Value != null && trait.Value != ExpectedValue;
+                return (string) trait.Value.GetValue<string>() != ExpectedValue;
             if (Operator == Operator.Contains)
-                return trait.Value != null && trait.Value.Contains(ExpectedValue);
+                return ((IEnumerable<string>) trait.Value.GetValue<IEnumerable<string>>()).Contains(ExpectedValue);
             if (Operator == Operator.DoesNotContain)
-                return trait.Value != null && !trait.Value.Contains(ExpectedValue);
+                return !((IEnumerable<string>) trait.Value.GetValue<IEnumerable<string>>()).Contains(ExpectedValue);
             if (Operator == Operator.IsNull)
-                return trait.Value == null;
+                return !trait.Value.HasValue();
             if (Operator == Operator.IsNotNull)
-                return trait.Value != null;
+                return trait.Value.HasValue();
             if (Operator == Operator.LessThan || Operator == Operator.LessThanEqual ||
                 Operator == Operator.GreaterThan || Operator == Operator.GreaterThanEqual)
             {
-                return NumericCompare(trait.Value, Operator, ExpectedValue);
+                return NumericCompare((string) trait.Value.GetValue<string>(), ExpectedValue);
             }
 
-            throw new NotImplementedException("don't know how to check for operator '" + Operator.Name + "'");
+            throw new NotImplementedException(Operator.Name);
         }
 
-        private bool NumericCompare(string left, Operator op, string right)
+        private bool NumericCompare(string left, string right)
         {
             var leftType = GetNumberType(left);
-            var rightType = GetNumberType(left);
+            var rightType = GetNumberType(right);
             if (leftType == null || rightType == null)
                 return false;
             if (leftType != rightType)

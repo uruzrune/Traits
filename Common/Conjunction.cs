@@ -9,7 +9,7 @@ namespace Common
         public IReadOnlyCollection<IRequirement> Requirements => _requirements;
         private readonly HashSet<IRequirement> _requirements;
 
-        public Conjunction(ICollection<IRequirement> requirements)
+        internal Conjunction(ICollection<IRequirement> requirements)
         {
             if (requirements == null || requirements.Count < 2)
                 throw new ArgumentException("requirements must have two or more elements");

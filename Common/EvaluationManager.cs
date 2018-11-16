@@ -19,12 +19,7 @@ namespace Common
 
         public bool Evaluate()
         {
-            return Evaluate(Definition.Requirements);
-        }
-
-        public bool Evaluate(IEnumerable<IRequirement> requirements)
-        {
-            foreach (var requirement in requirements)
+            foreach (var requirement in Definition.Requirements)
             {
                 bool value;
                 if (_requirements.ContainsKey(requirement))
